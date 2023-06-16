@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order now</title>
+    <script src="https://kit.fontawesome.com/5b1e85d20c.js" crossorigin="anonymous"></script>
+    
+    <style>
+     body{
+    background-image: url(images/bg.png);
+    font-family: 'Trebuchet MS', sans-serif;
+    height: 5%;
+    margin-bottom: 100px;
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: 600px;
+    background-color: #e2e2e8;
+
+
+}
+       
+        .contact-left{
+    flex-basis: 25%;
+}
+.contact-right{
+    flex-basis: 50%;
+}
+.contact-left p{
+    margin-top: 30px;
+}
+.contact-left p i{
+    color: black;
+    margin-right: 15px;
+    font-size: 25px;
+}
+.social-icons{
+    margin-top: 30px;
+}
+.social-icons a{
+    text-decoration: none;
+    font-size: 30px;
+    margin-right: 15px;
+    color: #ababab;
+    display: inline-block;
+    transition: transform 0.5s;
+}
+.social-icons a:hover{
+    color: black;
+    transform: translateY(-5px);
+}
+.btn.btn2{
+    display: inline-block;
+    background: #ff004f;
+}
+.contact-right form{
+    width: 30%;
+}
+.contact-right:hover{
+    color: #ff004f;
+    transform: translateY(-5px);
+    
+}
+form input,form textarea{
+    width: 50%;
+    border: 0;
+    outline: none;
+    background:  #e2e2e8;
+    padding: 15px;
+    margin: 15px 0;
+    color: black;
+    font-size: 18px;
+    border-radius: 6px;
+}
+form .btn2{
+    padding: 11px 50px;
+    font-size: 18px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+.bt{
+    display: inline-block;
+    background: #ff004f;
+}
+form .bt{
+    padding: 11px 50px;
+    font-size: 18px;
+    margin-top: 25px;
+    cursor: pointer;
+    background: #ff004f;
+    margin-right: 8%;
+}
+
+nav .fa-solid{
+    display: none;
+}
+.contact-right form {
+    padding: 3%;
+    margin-left: 4%;
+}
+.contact-left{
+    padding: 3%;
+    margin-left: 4%;
+}
+
+#btns{
+    background-color: black;
+    color: #e2e2e8;
+}
+
+      </style>
+</head>
+<body>
+   
+  
+    <div class="gallery" id="photoGallery"></div>
+    <div id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="contact-left">
+                    <h1 class="sub-title">Contact Me</h1>
+                    <p><i class="fa-solid fa-envelope"></i>assanjay519@gmail.com</p>
+                    <p><i class="fa-solid fa-phone"></i>9544428941</p>
+                    <div class="social-icons">
+                        
+                        <a href="https://instagram.com/sketchin01?igshid=ZGUzMzM3NWJiOQ=="><i class="fa-brands fa-instagram"></i>sanjay_z_art</a>
+                        
+                    </div>
+                </div>
+                <div class="contact-right">
+                
+                    <form name="submit-to-google-sheet">
+                        <input type="text" name="Name" placeholder="Your Name" required>
+                        <input type="email" name="Email" placeholder="Your Email" required>
+                        <textarea name="Message" rows="6" placeholder="Your Message"></textarea>
+                        <form enctype="multipart/form-data">
+                            <input type="file" id="upload" multiple id='btns'>
+                            <button type="button" class="bt" onclick="uploadPhotos()" id='btns'>Upload</button>
+                            <button type="submit" class="btn btn2" id='btns'>Submit</button>
+                    </form>
+                    <div id="msg"></div>
+                   
+                </div>
+            </div>
+        </div>
+  
+    <script>
+      function uploadPhotos() {
+        var input = document.getElementById("upload");
+        var files = input.files;
+  
+        var gallery = document.getElementById("photoGallery");
+  
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+  
+          var reader = new FileReader();
+  
+          reader.onload = function(e) {
+            var img = document.createElement("img");
+            img.src = e.target.result;
+            // gallery.appendChild(img);
+          }
+  
+          reader.readAsDataURL(file);
+        }
+      }
+    </script>
+     <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbz3tD-SIZXU_7ReRwQYlHByVooTv4SklgfGVAqvKOVjcP_XefSfVD6fQZeyZMkWEtVixA/exec'
+      const form = document.forms['submit-to-google-sheet']
+      const msg = document.getElementById("msg")
+
+      form.addEventListener('submit', e => {
+          e.preventDefault()
+          fetch(scriptURL, {
+                  method: 'POST',
+                  body: new FormData(form)
+              })
+              .then(response => {
+                  msg.innerHTML = "Message sent successfully"
+                  setTimeout(function() {
+                      msg.innerHTML = ""
+                  }, 5000)
+                  form.reset()
+              })
+              .catch(error => console.error('Error!', error.message))
+        // let name  = e.target[0].value;
+
+      })
+  </script>
+   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+   <!-- Include other Firebase libraries you need (e.g., Firebase Authentication, Firestore, etc.) -->
+   <script>
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    // Access Firebase services (e.g., Realtime Database)
+    var database = firebase.database();
+    const firebaseConfig = {
+  apiKey: "AIzaSyBcA98UvRUmbTLqwPF-5d7v1Mo-iQh7X0o",
+  authDomain: "arting-357e7.firebaseapp.com",
+  projectId: "arting-357e7",
+  storageBucket: "arting-357e7.appspot.com",
+  messagingSenderId: "954627291531",
+  appId: "1:954627291531:web:1c01e9ac3e697988d5d78e",
+  measurementId: "G-ZG6TEPXL2L"
+};
+    
+    // Your code goes here...
+  </script>
+  
+   
+</body>
+</html>
